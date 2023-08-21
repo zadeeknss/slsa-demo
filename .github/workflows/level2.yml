@@ -6,39 +6,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: build docker images with buildx
+  example:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v3
-      
-    - name: Build the Docker image
-      run: |
-        docker version
-        docker buildx build -t zadeeknss/nodeapp:v1.0 .
-        docker images
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-    - name: Push the Docker image to Docker Hub
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: zadeeknss/nodeapp:v1.0
 
-  provenance:
-    permissions:
-      contents: write # nested job explicitly require despite upload assets being set to false
-      actions: read # To read the workflow path.
-      id-token: write # To sign the provenance.
-    # NOTE: provenance fails if we use action pinning... it's a Github limitation
-    # because SLSA needs to trace & attest it came from a given branch; pinning doesn't expose that information
-    # https://github.com/slsa-framework/slsa-github-generator/blob/main/internal/builders/generic/README.md#referencing-the-slsa-generator
-    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.8.0
-    with:
-      # base64-subjects: ${{ needs.build.outputs.attestation_hashes }}
-      upload-assets: false  # we upload its attestation in create_tag job, otherwise it creates a new release
+    permissions: {}
+
+    name: Install Cosign
+    steps:
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.1.1
+        with:
+          cosign-release: 'v2.1.1'
+      - name: Check install!
+        run: cosign version
