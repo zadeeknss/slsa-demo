@@ -31,7 +31,6 @@ jobs:
         tags: zadeeknss/nodeapp:v1.0
 
   provenance:
-    needs:
     permissions:
       contents: write # nested job explicitly require despite upload assets being set to false
       actions: read # To read the workflow path.
