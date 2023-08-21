@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build example:
+  build-example:
     runs-on: ubuntu-latest
 
     permissions:
