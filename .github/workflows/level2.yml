@@ -51,3 +51,5 @@ jobs:
 
     - name: Sign the container
       run: cosign sign --yes zadeeknss/nodeapp-github:v1.0
+      env:
+          COSIGN_EXPERIMENTAL: "true"
