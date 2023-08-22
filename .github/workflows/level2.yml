@@ -36,3 +36,11 @@ jobs:
         push: true
         tags: zadeeknss/nodeapp-github:v1.0 
 
+    - name: setup cosign
+      uses: sigstore/cosign-installer@v3.1.1
+
+    - name: Check install!
+      run: cosign version
+
+    -name : Sign the container
+      run: cosign sign zadeeknss/nodeapp-github:v1.0 
