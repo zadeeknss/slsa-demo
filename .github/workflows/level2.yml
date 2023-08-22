@@ -9,6 +9,8 @@ jobs:
   build:
     name: build docker images with buildx
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write 
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v3
@@ -50,6 +52,6 @@ jobs:
       run: cosign version
 
     - name: Sign the container
-      run: cosign sign --yes zadeeknss/nodeapp-github:v1.0
       env:
           COSIGN_EXPERIMENTAL: "true"
+      run: cosign sign --force --yes zadeeknss/nodeapp-github:v1.0
