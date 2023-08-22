@@ -18,19 +18,21 @@ jobs:
 
     - name: Build the Docker image
       run: |
-        # docker version
-        # docker buildx create --use --name=buildkit-container --driver=docker-container 
-        docker buildx build --sbom=true --provenance=true -t zadeeknss/nodeapp-github:v1.0 --push .
-        docker images
+        docker version
+        docker buildx create --use --name=buildkit-container --driver=docker-container 
+        docker buildx build --sbom=true --provenance=true -t zadeeknss/nodeapp-github:v1.0 .
+        
+        
     - name: Log in to Docker Hub
       uses: docker/login-action@v1
       with:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        
     - name: Push the Docker image to Docker Hub
       uses: docker/build-push-action@v2
       with:
         context: .
         push: true
-        tags: zadeeknss/nodeapp-github:v1.0
+        tags: zadeeknss/nodeapp-github:v1.0 
 
