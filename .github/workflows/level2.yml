@@ -32,5 +32,5 @@ jobs:
       with:
         context: .
         push: true
-        tags: zadeeknss/nodeapp:v1.0
+        tags: zadeeknss/nodeapp-github:v1.0
 
