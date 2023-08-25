@@ -100,21 +100,15 @@ jobs:
            COSIGN_EXPERIMENTAL=1 cosign verify-attestation --type=slsaprovenance --certificate-oidc-issuer https://token.actions.githubusercontent.com   --certificate-identity-regexp '^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'   ${{ env.IMAGE_REGISTRY }}/${{github.repository}}@${{ needs.build.outputs.digest }}
           # # slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
           # #         --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
+      - name: run images
+        run: |
+          docker run -d -p 8080:8080 ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }}
 
-  # if-succeed:
-  #   needs: [args, builder]
-  #   runs-on: ubuntu-latest
-  #   # We use `== 'failure'` instead of ` != 'success'` because we want to ignore skipped jobs, if there are any.
-  #   if: github.event_name == 'schedule' && needs.args.result != 'failure' && needs.builder.result != 'failure'
-  #   permissions:
-  #     contents: read
-  #     issues: write
-  #   steps:
-  #     - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-  #       with:
-  #         repository: slsa-framework/example-package
-  #         ref: main
-  #     - run: ./.github/workflows/scripts/e2e-report-success.sh
+      - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        with:
+          repository: slsa-framework/example-package
+          ref: main
+      - run: ./.github/workflows/scripts/e2e-report-success.sh
 
   # if-failed:
   #   needs: [args, builder]
