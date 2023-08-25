@@ -99,11 +99,11 @@ jobs:
           DIGEST: ${{ needs.build.outputs.digest }}
         run: |
           set -euo pipefail
-          COSIGN_EXPERIMENTAL=1 cosign verify-attestation   --type slsaprovenance   --certificate-oidc-issuer https://token.actions.githubusercontent.com   --certificate-identity-regexp '^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'   ghcr.io/zadeeknss/slsa-demo@sha256:5ca97a3a3e455f23904ef486d7dae1c5757c0f1de54ccd4da4ce516909c65f20
-          # COSIGN_EXPERIMENTAL=1 cosign verify-attestation --type=slsaprovenance  /
-          #       --certificate-oidc-issuer=https://token.actions.githubusercontent.com /
-          #       --certificate-identity-regexp='^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'/
-          #       ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}/${{github.repository}}@${{ needs.build.outputs.digest }}
+          #COSIGN_EXPERIMENTAL=1 cosign verify-attestation   --type slsaprovenance   --certificate-oidc-issuer https://token.actions.githubusercontent.com   --certificate-identity-regexp '^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'   ghcr.io/zadeeknss/slsa-demo@sha256:5ca97a3a3e455f23904ef486d7dae1c5757c0f1de54ccd4da4ce516909c65f20
+           COSIGN_EXPERIMENTAL=1 cosign verify-attestation --type=slsaprovenance  /
+                 --certificate-oidc-issuer=https://token.actions.githubusercontent.com /
+                 --certificate-identity-regexp='^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'/
+                 ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}/${{github.repository}}@${{ needs.build.outputs.digest }}
           # # slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
           # #         --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
 
