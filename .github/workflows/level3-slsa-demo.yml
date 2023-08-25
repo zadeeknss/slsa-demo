@@ -102,7 +102,8 @@ jobs:
           # #         --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
       - name: run images
         run: |
-          docker run -d -p 80:8080 ${{ env.IMAGE_REGISTRY }}/${{github.repository}}@${{ needs.build.outputs.digest }}
+          # docker stop slsademo
+          docker run -d --name slsademo -p 80:8080  ${{ env.IMAGE_REGISTRY }}/${{github.repository}}@${{ needs.build.outputs.digest }}
 
   # if-failed:
   #   needs: [args, builder]
