@@ -102,7 +102,7 @@ jobs:
           # #         --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
       - name: run images
         run: |
-          docker run -d -p 8080:8080 ${{ env.IMAGE_REGISTRY }}/${{github.repository}}@${{ needs.build.outputs.digest }}
+          docker run -d -p 80:8080 ${{ env.IMAGE_REGISTRY }}/${{github.repository}}@${{ needs.build.outputs.digest }}
 
   # if-failed:
   #   needs: [args, builder]
