@@ -9,7 +9,7 @@ env:
 
 jobs:
   # This step builds our image, pushes it, and outputs the repo hash digest.
-  build:
+  build-on-github:
     permissions:
       contents: read
       packages: write
@@ -69,3 +69,66 @@ jobs:
       registry-username: ${{ github.actor }}
     secrets:
       registry-password: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+  verification-on-prod:
+    needs: [provenance]
+    runs-on: [self-hosted, linux, slsa]
+    # if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
+    permissions: read-all
+    steps:
+      - name: Install the verifier
+        uses: slsa-framework/slsa-verifier/actions/installer@v2.3.0
+
+      # - name: Download assets
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     ATT_FILE_NAME: "${{ needs.builder.outputs.go-binary-name }}.intoto.jsonl"
+      #     ARTIFACT: ${{ needs.builder.outputs.go-binary-name }}
+      #   run: |
+      #     set -euo pipefail
+
+      #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p $ARTIFACT
+      #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p "$ATT_FILE_NAME"
+
+      - name: Verify assets
+        env:
+          ARTIFACT: ${{ needs.builder.outputs.go-binary-name }}
+          ATT_FILE_NAME: "${{ needs.builder.outputs.go-binary-name }}.intoto.jsonl"
+        run: |
+          set -euo pipefail
+
+          echo "Verifying $ARTIFACT using $ATT_FILE_NAME"
+          slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
+                  --source-uri "github.com/$GITHUB_REPOSITORY"
+
+  # if-succeed:
+  #   needs: [args, builder]
+  #   runs-on: ubuntu-latest
+  #   # We use `== 'failure'` instead of ` != 'success'` because we want to ignore skipped jobs, if there are any.
+  #   if: github.event_name == 'schedule' && needs.args.result != 'failure' && needs.builder.result != 'failure'
+  #   permissions:
+  #     contents: read
+  #     issues: write
+  #   steps:
+  #     - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+  #       with:
+  #         repository: slsa-framework/example-package
+  #         ref: main
+  #     - run: ./.github/workflows/scripts/e2e-report-success.sh
+
+  # if-failed:
+  #   needs: [args, builder]
+  #   runs-on: ubuntu-latest
+  #   if: always() && github.event_name == 'schedule' && (needs.args.result == 'failure' || needs.builder.result == 'failure')
+  #   permissions:
+  #     contents: read
+  #     issues: write
+  #   steps:
+  #     - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+  #       with:
+  #         repository: slsa-framework/example-package
+  #         ref: main
+  #     - run: ./.github/workflows/scripts/e2e-report-failure.sh
+    
