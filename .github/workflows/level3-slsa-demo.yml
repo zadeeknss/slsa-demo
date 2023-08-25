@@ -1,5 +1,5 @@
 # Name of this GitHub Actions workflow.
-name: Slsa demo - slsa generator
+name: Slsa demo 
 
 on:
   workflow_dispatch:
