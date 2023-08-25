@@ -78,10 +78,6 @@ jobs:
     runs-on: [self-hosted, linux, slsa]
     # if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     permissions: read-all
-    with:
-      image: ${{ needs.build.outputs.image }}
-      digest: ${{ needs.build.outputs.digest }}
-      registry-username: ${{ github.actor }}
     steps:
       - name: Install the verifier
         uses: slsa-framework/slsa-verifier/actions/installer@v2.3.0
@@ -99,8 +95,7 @@ jobs:
 
       - name: Verify assets
         env:
-          ARTIFACT: ${{ needs.builder.outputs.go-binary-name }}
-          ATT_FILE_NAME: "${{ needs.builder.outputs.go-binary-name }}.intoto.jsonl"
+          DIGEST: ${{ needs.build.outputs.digest }}
         run: |
           set -euo pipefail
 
