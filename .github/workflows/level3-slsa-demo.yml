@@ -80,8 +80,9 @@ jobs:
     permissions: read-all
     steps:
       - name: Install the verifier
-        uses: slsa-framework/slsa-verifier/actions/installer@v2.3.0
-        
+        uses: sigstore/cosign-installer@v3.1.1
+        with:
+          cosign-release: 'v2.1.1' # optional
       # - name: Download assets
       #   env:
       #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -93,15 +94,17 @@ jobs:
       #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p $ARTIFACT
       #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p "$ATT_FILE_NAME"
 
-      # - name: Verify assets
-      #   env:
-      #     DIGEST: ${{ needs.build.outputs.digest }}
-      #   run: |
-      #     set -euo pipefail
-
-      #     echo "Verifying $ARTIFACT using $ATT_FILE_NAME"
-      #     slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
-      #             --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
+      - name: Verify assets
+        env:
+          DIGEST: ${{ needs.build.outputs.digest }}
+        run: |
+          set -euo pipefail
+          COSIGN_EXPERIMENTAL=1 cosign verify-attestation -type slsaprovenance  /
+                --certificate-oidc-issuer https://token.actions.githubusercontent.com /
+                --certificate-identity-regexp '^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'/
+                ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}/${{github.repository}}@${{ needs.build.outputs.digest }}
+          # slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
+          #         --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
 
   # if-succeed:
   #   needs: [args, builder]
