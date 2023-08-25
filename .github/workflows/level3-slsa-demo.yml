@@ -99,9 +99,9 @@ jobs:
           DIGEST: ${{ needs.build.outputs.digest }}
         run: |
           set -euo pipefail
-          COSIGN_EXPERIMENTAL=1 cosign verify-attestation -type slsaprovenance  /
-                --certificate-oidc-issuer https://token.actions.githubusercontent.com /
-                --certificate-identity-regexp '^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'/
+          COSIGN_EXPERIMENTAL=1 cosign verify-attestation --type=slsaprovenance  /
+                --certificate-oidc-issuer=https://token.actions.githubusercontent.com /
+                --certificate-identity-regexp='^https://github.com/slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@refs/tags/v[0-9]+.[0-9]+.[0-9]+$'/
                 ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}/${{github.repository}}@${{ needs.build.outputs.digest }}
           # slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
           #         --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
