@@ -102,20 +102,6 @@ jobs:
           # #         --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
       - name: run images
         run: |
-          # docker stop slsademo
+          docker stop slsademo
+          docker rm slsademo
           docker run -d --name slsademo -p 80:8080  ${{ env.IMAGE_REGISTRY }}/${{github.repository}}@${{ needs.build.outputs.digest }}
-
-  # if-failed:
-  #   needs: [args, builder]
-  #   runs-on: ubuntu-latest
-  #   if: always() && github.event_name == 'schedule' && (needs.args.result == 'failure' || needs.builder.result == 'failure')
-  #   permissions:
-  #     contents: read
-  #     issues: write
-  #   steps:
-  #     - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-  #       with:
-  #         repository: slsa-framework/example-package
-  #         ref: main
-  #     - run: ./.github/workflows/scripts/e2e-report-failure.sh
-    
