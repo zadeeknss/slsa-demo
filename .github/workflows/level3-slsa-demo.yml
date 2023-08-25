@@ -73,7 +73,7 @@ jobs:
 
 
 
-  verification-on-prod:
+  verification:
     needs: [provenance]
     runs-on: [self-hosted, linux, slsa]
     # if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
@@ -81,7 +81,7 @@ jobs:
     steps:
       - name: Install the verifier
         uses: slsa-framework/slsa-verifier/actions/installer@v2.3.0
-
+        
       # - name: Download assets
       #   env:
       #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
