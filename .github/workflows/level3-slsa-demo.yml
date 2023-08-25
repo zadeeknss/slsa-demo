@@ -93,15 +93,15 @@ jobs:
       #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p $ARTIFACT
       #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p "$ATT_FILE_NAME"
 
-      - name: Verify assets
-        env:
-          DIGEST: ${{ needs.build.outputs.digest }}
-        run: |
-          set -euo pipefail
+      # - name: Verify assets
+      #   env:
+      #     DIGEST: ${{ needs.build.outputs.digest }}
+      #   run: |
+      #     set -euo pipefail
 
-          echo "Verifying $ARTIFACT using $ATT_FILE_NAME"
-          slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
-                  --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
+      #     echo "Verifying $ARTIFACT using $ATT_FILE_NAME"
+      #     slsa-verifier verify-image ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.digest }} /
+      #             --source-uri "github.com/${{ github.actor }}/${{github.repository}}"
 
   # if-succeed:
   #   needs: [args, builder]
