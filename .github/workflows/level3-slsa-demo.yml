@@ -79,20 +79,17 @@ jobs:
     # if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     permissions: read-all
     steps:
+      - name: Authenticate Docker
+        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
+        with:
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Install the verifier
         uses: sigstore/cosign-installer@v3.1.1
         with:
           cosign-release: 'v2.1.1' # optional
-      # - name: Download assets
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     ATT_FILE_NAME: "${{ needs.builder.outputs.go-binary-name }}.intoto.jsonl"
-      #     ARTIFACT: ${{ needs.builder.outputs.go-binary-name }}
-      #   run: |
-      #     set -euo pipefail
-
-      #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p $ARTIFACT
-      #     gh -R "$GITHUB_REPOSITORY" release download "$GITHUB_REF_NAME" -p "$ATT_FILE_NAME"
 
       - name: Verify assets
         env:
