@@ -17,7 +17,7 @@ jobs:
     outputs:
       image: ${{ steps.image.outputs.image }}
       digest: ${{ steps.build.outputs.digest }}
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, slsa2]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
