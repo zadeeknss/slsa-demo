@@ -22,12 +22,6 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
 
-      - name: edit package.json
-        run: |
-          pwd
-          rm package.json
-          mv package2.json package.json
-          ls
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@4c0219f9ac95b02789c1075625400b2acbff50b1 # v2.9.1
 
