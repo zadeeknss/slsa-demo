@@ -42,14 +42,20 @@ jobs:
         run: sleep 100s
         shell: bash
         
-      - name: Build and push Docker image
-        uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8 # v3.0.0
-        id: build
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8 # v3.0.0
+      #   id: build
+      #   with:
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
 
+      - name: Build and push Docker image
+        run: |
+          docker buildx build --sbom=true --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
+
+
+      
       - name: Output image
         id: image
         run: |
