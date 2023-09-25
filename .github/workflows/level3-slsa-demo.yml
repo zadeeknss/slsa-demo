@@ -53,7 +53,7 @@ jobs:
       - name: Build and push Docker image
         id: build
         run: |
-          docker buildx build --sbom=true --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
+          docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
 
 
       
