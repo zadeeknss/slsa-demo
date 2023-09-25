@@ -39,7 +39,7 @@ jobs:
           images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           
       - name: Sleep for 30 seconds
-        run: sleep 100s
+        run: sleep 10s
         shell: bash
         
       # - name: Build and push Docker image
