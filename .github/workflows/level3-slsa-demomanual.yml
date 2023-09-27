@@ -79,7 +79,7 @@ jobs:
 
 
   verification:
-    needs: [provenance, build]
+    needs: [ build]
     runs-on: [self-hosted, linux, slsa2]
     # if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
     permissions: read-all
