@@ -1,5 +1,5 @@
 # Name of this GitHub Actions workflow.
-name: Slsa demo 
+name: Slsa demo manual
 
 on:
   workflow_dispatch:
@@ -106,4 +106,4 @@ jobs:
         run: |
           docker stop slsademo
           docker rm slsademo
-          docker run -d --name slsademo -p 80:8080  ${{ env.IMAGE_REGISTRY }}/${{github.repository}}@${{ needs.build.outputs.digest }}
+          docker run -d --name slsademo -p 80:8080  ghcr.io/zadeeknss/slsa-demo:main
