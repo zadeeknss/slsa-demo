@@ -45,15 +45,11 @@ jobs:
 
       - name: Build and push Docker image
         id: build
-
-
+        
         run: |
           docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
-          docker images
-          outputs:
-            digest:
-              description: "image digest"
-              value: ${{ steps.random-number-generator.outputs.random-id }}
+          echo "SHA256:zadeekummer" >> $GITHUB_OUTPUT
+      
 
       - name: Output image
         id: image
