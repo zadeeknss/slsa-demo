@@ -55,22 +55,25 @@ jobs:
       # - name: Print package.json after changes
       #   run: cat $GITHUB_WORKSPACE/package.json
           
-      - name: Build and push Docker image
-        uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8 # v3.0.0
-        id: build
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
       # - name: Build and push Docker image
+      #   uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8 # v3.0.0
       #   id: build
-      #   run: |
-      #     docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
-      #     dockerSHA=$(docker images --no-trunc --quiet ghcr.io/zadeeknss/slsa-demo:main)
-      #     image_name="${IMAGE_REGISTRY}/${IMAGE_NAME}"
-      #     echo "digest=$dockerSHA" >> "$GITHUB_OUTPUT"
-      #     echo "image=$image_name" >> "$GITHUB_OUTPUT"
+      #   with:
+      #     push: true
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image
+        id: build
+        run: |
+          docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
+          dockerSHA=$(docker images --no-trunc --quiet ghcr.io/zadeeknss/slsa-demo:main)
+          dockerSHA2=$(docker inspect --format='{{index .RepoDigests 0}}' mySuperCoolTag  | perl -wnE'say /sha256.*/g')
+          image_name="${IMAGE_REGISTRY}/${IMAGE_NAME}"
+          echo dockerSHA
+          echo dockerSHA2
+          echo "digest=$dockerSHA2" >> "$GITHUB_OUTPUT"
+          echo "image=$image_name" >> "$GITHUB_OUTPUT"
 
 
       
