@@ -43,13 +43,19 @@ jobs:
         run: docker images
           
 
+      # - name: Build and push Docker image
+      #   id: build
+      #   run: |
+      #     docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
+      #     docker images
+
       - name: Build and push Docker image
+        uses: docker/build-push-action@e551b19e49efd4e98792db7592c17c09b89db8d8 # v3.0.0
         id: build
-        run: |
-          docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
-          docker images
-
-
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
       
       - name: Output image
         id: image
