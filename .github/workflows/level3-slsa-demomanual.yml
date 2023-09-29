@@ -44,7 +44,7 @@ jobs:
         run: |
           docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
           echo "digest=SHA256:zadeekummer" >> $GITHUB_OUTPUT
-          echo "{name}={value}" >> $GITHUB_STATE
+          echo "digest=SHA256:zadeekummer" >> $GITHUB_STATE
       
 
       - name: Output image
