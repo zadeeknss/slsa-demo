@@ -55,6 +55,9 @@ jobs:
           # available to the inputs of a reusable workflow call.
           image_name="${IMAGE_REGISTRY}/${IMAGE_NAME}"
           echo "image=$image_name" >> "$GITHUB_OUTPUT"
+          digest="docker images --no-trunc --quiet ${IMAGE_REGISTRY}/${IMAGE_NAME}"
+          echo "digest=$digest" >> $GITHUB_OUTPUT
+          echo "digest=SHA256:zadeekummer" >> $GITHUB_STATE
 
 
   # # This step calls the container workflow to generate provenance and push it to
