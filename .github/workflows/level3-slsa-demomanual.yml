@@ -20,7 +20,7 @@ jobs:
     runs-on: [self-hosted, linux, slsa2]
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@v3
         
       - name: Sleep for 30 seconds
         run: sleep 30s
@@ -39,14 +39,15 @@ jobs:
         with:
           images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           
-      - name: Print package.json after changes
-        run: cat $GITHUB_WORKSPACE/package.json
+      - name: Print docker images
+        run: docker images
           
 
       - name: Build and push Docker image
         id: build
         run: |
           docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
+          docker images
 
 
       
