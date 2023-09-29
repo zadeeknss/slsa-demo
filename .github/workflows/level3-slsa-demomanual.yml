@@ -39,16 +39,11 @@ jobs:
         with:
           images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           
-      # - name: Print docker images
-      #   run: docker images
-          
-
       - name: Build and push Docker image
         id: build
-        
         run: |
           docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
-          echo "SHA256:zadeekummer" >> $GITHUB_OUTPUT
+          echo "digest=SHA256:zadeekummer" >> $GITHUB_OUTPUT
       
 
       - name: Output image
