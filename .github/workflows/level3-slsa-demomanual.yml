@@ -19,12 +19,12 @@ jobs:
       digest: ${{ steps.build.outputs.digest }}
     runs-on: [self-hosted, linux, slsa2]
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
+      # - name: Checkout the repository
+      #   uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9
         
-      - name: Sleep for 30 seconds
-        run: sleep 30s
-        shell: bash
+      # - name: Sleep for 30 seconds
+      #   run: sleep 30s
+      #   shell: bash
 
       - name: Authenticate Docker
         uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
@@ -33,14 +33,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a # v4.0.1
-        with:
-          images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+      # - name: Extract metadata (tags, labels) for Docker
+      #   id: meta
+      #   uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a # v4.0.1
+      #   with:
+      #     images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           
-      - name: Print docker images
-        run: docker images
+      # - name: Print docker images
+      #   run: docker images
           
 
       # - name: Build and push Docker image
