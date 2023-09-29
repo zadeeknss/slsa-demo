@@ -43,7 +43,8 @@ jobs:
         id: build
         run: |
           docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
-          echo "digest=SHA256:zadeekummer" >> $GITHUB_OUTPUT
+          digest="docker images --no-trunc --quiet ${IMAGE_REGISTRY}/${IMAGE_NAME}"
+          echo "digest=$digest" >> $GITHUB_OUTPUT
           echo "digest=SHA256:zadeekummer" >> $GITHUB_STATE
       
 
