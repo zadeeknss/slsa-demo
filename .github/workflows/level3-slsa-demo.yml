@@ -66,9 +66,9 @@ jobs:
       - name: Build and push Docker image
         id: build
         run: |
-          docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo --push . 
+          docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
           dockerSHA=$(docker images --no-trunc --quiet ghcr.io/zadeeknss/slsa-demo:main)
-          dockerSHA2=$(docker inspect --format='{{index .RepoDigests 0}}' mySuperCoolTag  | perl -wnE'say /sha256.*/g')
+          dockerSHA2=$(docker inspect --format='{{index .RepoDigests 0}}' ghcr.io/zadeeknss/slsa-demo:main  | perl -wnE'say /sha256.*/g')
           image_name="${IMAGE_REGISTRY}/${IMAGE_NAME}"
           echo $dockerSHA
           echo $dockerSHA2
