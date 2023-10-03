@@ -19,16 +19,6 @@ jobs:
       digest: ${{ steps.build.outputs.digest }}
     runs-on: [self-hosted, linux, slsa2]
     steps:
-    
-      - name: Checkout the repository
-        run: |
-          git clone http://ec2-54-165-59-158.compute-1.amazonaws.com/zadeek_claranet/slsa_demo.git
-
-        
-      # - name: Sleep for 30 seconds
-      #   run: sleep 30s
-      #   shell: bash
-
       - name: Authenticate Docker
         uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b # v2.0.0
         with:
@@ -41,26 +31,42 @@ jobs:
         uses: docker/metadata-action@69f6fc9d46f2f8bf0d5491e4aabe0bb8c6a4678a # v4.0.1
         with:
           images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
-          
-      - name: Build and push Docker image
-        id: build
+    
+      - name: Checkout the repository
         run: |
+          git clone http://ec2-54-165-59-158.compute-1.amazonaws.com/zadeek_claranet/slsa_demo.git
+          cd slsa_demo
           docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
           digest="docker images --no-trunc --quiet ${IMAGE_REGISTRY}/${IMAGE_NAME}"
           echo "digest=$digest" >> $GITHUB_OUTPUT
           echo "digest=SHA256:zadeekummer" >> $GITHUB_STATE
+        
+      # - name: Sleep for 30 seconds
+      #   run: sleep 30s
+      #   shell: bash
+
+x
+
+          
+      # - name: Build and push Docker image
+      #   id: build
+      #   run: |
+      #     docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
+      #     digest="docker images --no-trunc --quiet ${IMAGE_REGISTRY}/${IMAGE_NAME}"
+      #     echo "digest=$digest" >> $GITHUB_OUTPUT
+      #     echo "digest=SHA256:zadeekummer" >> $GITHUB_STATE
       
 
-      - name: Output image
-        id: image
-        run: |
-          # NOTE: Set the image as an output because the `env` context is not
-          # available to the inputs of a reusable workflow call.
-          image_name="${IMAGE_REGISTRY}/${IMAGE_NAME}"
-          echo "image=$image_name" >> "$GITHUB_OUTPUT"
-          digest="docker images --no-trunc --quiet ${IMAGE_REGISTRY}/${IMAGE_NAME}"
-          echo "digest=$digest" >> $GITHUB_OUTPUT
-          echo "digest=SHA256:zadeekummer" >> $GITHUB_STATE
+      # - name: Output image
+      #   id: image
+      #   run: |
+      #     # NOTE: Set the image as an output because the `env` context is not
+      #     # available to the inputs of a reusable workflow call.
+      #     image_name="${IMAGE_REGISTRY}/${IMAGE_NAME}"
+      #     echo "image=$image_name" >> "$GITHUB_OUTPUT"
+      #     digest="docker images --no-trunc --quiet ${IMAGE_REGISTRY}/${IMAGE_NAME}"
+      #     echo "digest=$digest" >> $GITHUB_OUTPUT
+      #     echo "digest=SHA256:zadeekummer" >> $GITHUB_STATE
 
 
 
@@ -81,6 +87,6 @@ jobs:
           
       - name: run images
         run: |
-          docker stop slsademo
-          docker rm slsademo
-          docker run -d --name slsademo -p 80:8080  ghcr.io/zadeeknss/slsa-demo:main
+          # docker stop slsademo-vuln
+          # docker rm slsademo-vuln
+          docker run -d --name slsademo-vuln -p 80:8080  ghcr.io/zadeeknss/slsa-demo:main
