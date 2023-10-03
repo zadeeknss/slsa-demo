@@ -1,5 +1,5 @@
 # Name of this GitHub Actions workflow.
-name: Slsa demo manual
+name: Slsa demo Vulnerable
 
 on:
   workflow_dispatch:
