@@ -34,6 +34,7 @@ jobs:
     
       - name: Checkout the repository
         run: |
+          rm -rf slsa_demo
           git clone http://ec2-54-165-59-158.compute-1.amazonaws.com/zadeek_claranet/slsa_demo.git
           cd slsa_demo
           docker buildx build --provenance=true -t ghcr.io/zadeeknss/slsa-demo:main --push . 
