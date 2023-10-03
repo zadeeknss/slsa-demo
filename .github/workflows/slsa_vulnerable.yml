@@ -85,6 +85,6 @@ jobs:
           
       - name: run images
         run: |
-          # docker stop slsademo-vuln
+          docker stop slsademo
           # docker rm slsademo-vuln
           docker run -d --name slsademo-vuln -p 80:8080  ghcr.io/zadeeknss/slsa-demo:main
